@@ -2,10 +2,7 @@ package no.ntnu.library;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -51,5 +48,41 @@ public class BookController {
             }
         }
         return null;
+    }
+
+    @PostMapping("")
+    public ResponseEntity<Book> addBook(@RequestBody Book book) {
+        boolean bookExists = false;
+        if (book.isValid()) {
+            for (Book b : books) {
+                if (b.getId() == book.getId()) {
+                    bookExists = true;
+                }
+            }
+            if (!bookExists) {
+                books.add(book);
+                return new ResponseEntity<>(book, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Book> removeBook(@PathVariable int id) {
+        Book book = null;
+        for (Book b : books) {
+            if (b.getId() == id) {
+                book = b;
+            }
+        }
+        if (null != book) {
+            books.remove(book);
+            return new ResponseEntity<>(book, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

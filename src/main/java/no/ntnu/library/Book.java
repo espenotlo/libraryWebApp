@@ -5,12 +5,14 @@ public class Book {
     private String title;
     private int year;
     private int numberOfPages;
+    private boolean isValid;
 
     public Book(int id, String title, int year, int numberOfPages) {
         this.id = id;
         this.title = title;
         this.year = year;
         this.numberOfPages = numberOfPages;
+        this.isValid = !title.isEmpty() && year > 0 && numberOfPages > 0 && id >= 1;
     }
 
     public int getId() {
@@ -43,5 +45,9 @@ public class Book {
 
     public void setNumberOfPages(int numberOfPages) {
         this.numberOfPages = numberOfPages;
+    }
+
+    public boolean isValid() {
+        return this.isValid;
     }
 }
